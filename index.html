@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <title>Portafolio Maximiliano</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <div id="container">
+        <section class="home">
+            <div class="izquierda">
+                <article class="scroll-reveal fade-left">
+                    <img alt="maxi" src="imagen1.png" title="MaxiDev" />
+                </article>
+            </div>
+            <div class="derecha">
+                <article class="sobremi scroll-reveal fade-up">
+                    <h1>Maximiliano</h1>
+                    <h3>FullStack Developer</h3>
+                    <ul>
+                        <li class="scroll-reveal fade-up">
+                           <a>Carta de precentacion</a>
+                        </li>
+                        <li class="scroll-reveal fade-up">
+                            <a>Video de entrevista</a>
+                        </li>
+                        <li class="scroll-reveal fade-up">
+                            <a>Me recomendo</a>
+                        </li>
+                    </ul>
+                    <button>Descargar CV</button>
+                </article>
+            </div>
+        </section>
+        <section class="carta scroll-reveal fade-right">
+            <article class="fotolibre">
+                <img alt="fotoLibro" title="fotoLibro" src="imagen2.png" />
+            </article>
+
+            <div class="pergamino-container">
+                <img src="pergaminoCerrado.png" class="pergamino-closed" alt="Pergamino enrollado">
+                <img src="manuscrito1.png" class="pergamino-open" alt="Pergamino abierto">
+            </div>
+        </section>
+        <section class="video">
+            <iframe class="videoYoutube" src="https://www.youtube.com/embed/pyxlrk2lQ78"
+                title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+
+            <img alt="precentacion" title="precentacion" src="imagen3.png" />
+        </section>
+
+        <section class="reseñas">
+
+            <div class="reseñas__imagen">
+                <img src="imagen4.png" alt="FotoMate" title="FotoMate">
+            </div>
+
+            <div class="reseñas__lista">
+
+                <div class="reseña">
+                    <h3 class="reseña__nombre">
+                        Denisse Molina (Soporte en integraciones y QA tester)
+                    </h3>
+                    <p class="reseña__texto">
+                        Trabajar con Maximiliano fue una experiencia muy grata.
+                        Es una persona con gran calidad humana, siempre dispuesta a ayudar
+                        y a mantener un ambiente positivo en el equipo.
+                    </p>
+                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                </div>
+
+                <div class="reseña">
+                    <h3 class="reseña__nombre">
+                        Dario Condori (Desarrollador Backend)
+                    </h3>
+                    <p class="reseña__texto">
+                        Trabajamos juntos en Moebius donde él se encargó del Frontend (Angular)
+                        y yo del Backend (Laravel).
+                        Valoro su enfoque colaborativo, siempre dispuesto a encontrar la solución
+                        para integrar nuestros trabajos.
+                        Es un colega confiable y un profesional con sólidos conocimientos en Angular.
+                    </p>
+                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                </div>
+
+                <div class="reseña">
+                    <h3 class="reseña__nombre">
+                        Juan Pablo Villalba (React Native Dev)
+                    </h3>
+                    <p class="reseña__texto">
+                        Maximiliano Dos Santos es un compañero de equipo eficaz, que maneja un gran nivel en programación de varios tipos. 
+                        Tiene una facilidad de aprendizaje y adaptación que le permiten reestructurar proyectos según la necesidad.  
+                        Es fácil trabajar a su lado; destaco su compromiso al nunca fallar en una entrega, por más complicada que esta sea.
+                    </p>
+                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                </div>
+
+                <div class="reseña">
+                    <h3 class="reseña__nombre">
+                        Ramon Diaz (Soporte IT – Tester Manual QA)
+                    </h3>
+                    <p class="reseña__texto">
+                        Me complace recomendar a Maximiliano por su destacado desempeño
+                        en la resolución de bugs en el proyecto para el cual colaboré.
+                        Aunque no trabajé directamente bajo su supervisión, tuve la oportunidad
+                        de tratar con el código que él entregaba antes de producción.
+                        Maximiliano demostró una habilidad excepcional para comprender y solucionar
+                        problemas técnicos de manera rápida y efectiva.
+                        Su dedicación y disposición para ayudar fueron notables.
+                        Fue un placer colaborar con él y aprender de su experiencia.
+                    </p>
+                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <audio id="audioPergamino" src="musicaPergamino.mpeg"></audio>
+
+    <script>
+        const elements = document.querySelectorAll('.scroll-reveal');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        elements.forEach(el => observer.observe(el));
+
+        const pergamino = document.querySelector('.pergamino-container');
+        const audio = document.getElementById('audioPergamino');
+
+        pergamino.addEventListener('click', () => {
+            pergamino.classList.toggle('open');
+
+            if (pergamino.classList.contains('open')) {
+                //alert("SE EJECUTA EL BLOQUE DEL AUDIO (ABRIENDO)");
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                //alert("SE EJECUTA EL BLOQUE DEL CIERRE");
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        });
+    </script>
+
+</body>
+
+</html>
