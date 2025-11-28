@@ -82,6 +82,7 @@ body {
     color: rgb(163, 19, 168);
 }
 
+/*
 .sobremi ul {
     width: 70%;
     height: 100px;
@@ -119,6 +120,55 @@ body {
     margin-left: 10px;
     border-style: none;
 }
+*/
+.stackClass {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    color: white;
+}
+
+.stackClass li {
+    width: fit-content;
+    height: fit-content;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.angular {
+    background: #DD0031;
+}
+
+.react {
+    background: #61DAFB;
+    color: #000;
+}
+
+.javascript {
+    background: #F7DF1E;
+    color: #000;
+}
+
+.node {
+    background: #3C873A;
+}
+
+.mongodb {
+    background: #4DB33D;
+}
+
+.php {
+    background: #777BB4;
+}
+
+.phpmyadmin {
+    background: #F0A500;
+}
 
 .carta {
     width: 100%;
@@ -154,6 +204,8 @@ body {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    max-width: 98%;
+    height: 90%;
 }
 
 .pergamino-closed {
@@ -389,28 +441,71 @@ body {
     padding-left: 10px;
     gap: 1rem;
     border-bottom-left-radius: 10px;
+    box-shadow: rgb(103, 103, 168) 1px 1px 1px 0px;
 }
 
-.cuerpo div {
+.cuerpodiv {
     width: 90%;
     height: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 5px;
-    position: relative;
+    flex-direction: column;
 }
 
 .cuerpo ul {
-    width: 50%;
+    width: 100%;
     height: 30%;
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
+    padding-left: 15px;
     list-style: none;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+    gap: 2rem;
+}
+
+.proyectosExplorer {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.proyectosExplorer h2 {
+    width: 100%;
+    height: fit-content;
+    text-align: start;
+    background: rgba(103, 103, 168, 0.24);
+    padding: 2px;
+    padding-left: 10px;
+}
+
+.proyectosContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 10px;
+}
+
+.item {
+    width: 50%;
+    height: 40%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+}
+
+.imgItem {
+    width: 30%;
+    height: fit-content;
+    object-fit: cover;
 }
 
 .cuerpo li {
@@ -422,7 +517,7 @@ body {
     flex-direction: column;
 }
 
-.cuerpo img {
+.cuerpoImg {
     width: 100%;
     object-fit: cover;
 }
@@ -461,6 +556,38 @@ body {
     position: relative;
 }
 
+.titleProyect {
+    padding: 20px;
+}
+
+.textModal {
+    width: 85%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: start;
+    line-height: 1.5;
+    padding-left: 20px;
+}
+
+.containerArticle {
+    width: 100%;
+    height: 90%;
+    overflow-y: scroll;
+}
+
+.videoYoutubeModal {
+    width: 70%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+
 .cerrar {
     width: 30px;
     height: 30px;
@@ -472,6 +599,23 @@ body {
     justify-content: center;
     align-items: center;
     display: flex;
+}
+
+.imgPañol {
+    width: 70%;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 20px;
+}
+
+.imgPañol img {
+    width: 90%;
+    height: fit-content;
+    margin-bottom: 20px;
 }
 
 @keyframes fadeIn {
@@ -570,7 +714,7 @@ body {
         align-items: center;
     }
 
-    .sobremi{
+    .sobremi {
         width: 100%;
         height: 100%;
         padding: 10px;
@@ -589,16 +733,23 @@ body {
         font-size: 20px;
     }
 
-    .sobremi ul {
+    .stackClass {
         width: 100%;
-        height: 500px;
+        height: fit-content;
         flex-direction: column;
+        gap: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .sobremi li{
-        width: 80%;
-        height: 70px;
+    .stackClass li {
+        width: fit-content;
+        height: fit-content;
+        text-align: center;
     }
+
+
 
     .sobremi button {
         width: 50%;
@@ -665,19 +816,56 @@ body {
         display: none;
     }
 
-    .cuerpo div {
+    .cuerpodiv {
         width: 100%;
     }
 
-    .cuerpo ul {
+    .cuerpodiv ul {
         width: 100%;
-        height: 90%;
-        flex-direction: column;
+        height: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, auto);
+        gap: 15px;
+        padding: 10px;
+        list-style: none;
+        overflow-x: hidden;
     }
 
-    .cuerpo li {
-        height: 30%;
+    .cuerpodiv li {
+        height: 33%;
+        gap: 10px;
     }
+
+    .cuerpodiv img {
+        height: fit-content;
+    }
+
+    .containerArticle {
+        height: 500px;
+    }
+
+    .textModal {
+        width: 100%;
+    }
+
+    .videoYoutubeModal {
+        width: 90%;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .imgPañol {
+        width: 100%;
+    }
+
+    .imgPañol img {
+        width: 90%;
+        object-fit: cover;
+    }
+
 }
 
 @media (max-width: 900px) {
@@ -764,7 +952,7 @@ body {
 
 
 
-.cerrar:hover{
+.cerrar:hover {
     width: 30px;
     height: 30px;
     display: flex;

@@ -22,6 +22,7 @@
                 <article class="sobremi scroll-reveal fade-up">
                     <h1>Maximiliano</h1>
                     <h3>FullStack Developer</h3>
+                    <!--
                     <ul>
                         <li class="scroll-reveal fade-up">
                             <a>Carta de precentacion</a>
@@ -34,6 +35,16 @@
                         </li>
                     </ul>
                     <button>Descargar CV</button>
+                    -->
+                    <ul class="stackClass">
+                        <li class="angular">Angular</li>
+                        <li class="react">React</li>
+                        <li class="javascript">JavaScript</li>
+                        <li class="node">Node</li>
+                        <li class="mongodb">MongoDB</li>
+                        <li class="php">Php</li>
+                        <li class="phpmyadmin">PhpMyAdmin</li>
+                    </ul>
                 </article>
             </div>
         </section>
@@ -47,7 +58,9 @@
                 <img src="manuscrito1.png" class="pergamino-open" alt="Pergamino abierto">
             </div>
         </section>
-        <section class="video">
+
+        <!--
+         <section class="video">
             <iframe class="videoYoutube" src="https://www.youtube.com/embed/pyxlrk2lQ78" title="YouTube video player"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -55,7 +68,8 @@
             </iframe>
 
             <img alt="precentacion" title="precentacion" src="imagen3.png" />
-        </section>
+        </section> 
+       -->
 
         <section class="proyectos">
             <div class="explorer">
@@ -74,23 +88,134 @@
                 <secton class="tools"></secton>
                 <secton class="cuerpo">
                     <article></article>
-                    <div>
+                    <div class="cuerpodiv">
                         <ul>
                             <li>
-                                <img src="folder.png" />
+                                <img class="cuerpoImg" src="folder.png" />
                                 <a href="#" data-modal="modal-moebius">Moebius</a>
                             </li>
                             <li>
-                                <img src="folder.png" />
+                                <img class="cuerpoImg" src="folder.png" />
                                 <a href="#" data-modal="modal-legalrun">LegalRun</a>
                             </li>
                             <li>
-                                <img src="folder.png" />
+                                <img class="cuerpoImg" src="folder.png" />
                                 <a href="#" data-modal="modal-petzify">Petzify</a>
                             </li>
+
                         </ul>
+                        <section class="proyectosExplorer">
+                            <h2>Proyectos</h2>
+                            <div class="proyectosContainer">
+                                <div class="item">
+                                    <img class="imgItem" src="1.png" />
+                                    <a href="#" data-modal="modal-codigo-azul">Codigo Azul</a>
+                                </div>
+                                <div class="item">
+                                    <img class="imgItem" src="2.png" />
+                                    <a href="#" data-modal="modal-panol-app">Pañol App</a>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </secton>
+
+                <div id="modal-codigo-azul" class="modal">
+                    <div class="modal-contenido">
+                        <span class="cerrar">&times;</span>
+                        <h2 class="titleProyect">OLIMPÍADA NACIONAL DE ETP 2023</h2>
+                        <article class="containerArticle">
+                            <p class="textModal">
+                                Nuestra tarea consiste en crear una solución digital para el protocolo médico conocido
+                                como
+                                "Código Azul", que se caracteriza por activar dos alarmas que requieren la presencia de
+                                personal médico. Esta solución debe permitir el acceso mediante un sistema de
+                                autenticación
+                                basado en usuario y contraseña, ofreciendo una serie de funcionalidades clave:
+                                <br></br>Crear áreas médicas: La aplicación debe permitir la creación de áreas médicas,
+                                lo
+                                que
+                                implica configurar espacios específicos para el manejo de situaciones médicas críticas.
+                                <br></br>Asignar personal: Debe ser posible asignar y gestionar el personal médico a las
+                                áreas
+                                correspondientes, asegurando una adecuada distribución de recursos humanos.
+                                <br></br>Asignar pacientes: La solución debe facilitar la asignación de pacientes a las
+                                áreas
+                                médicas, garantizando una atención eficiente y oportuna.
+                                <br></br>Prender alarmas: En cada área médica, se debe tener la capacidad de activar
+                                alarmas
+                                para
+                                alertar sobre situaciones médicas críticas en curso, lo que requerirá una interfaz
+                                intuitiva
+                                y efectiva.
+                                <br></br>
+                                Este proyecto se ha planteado con un plazo de ejecución de una semana, lo que exige una
+                                selección cuidadosa de tecnologías y estrategias de desarrollo para cumplir con los
+                                requisitos y expectativas del protocolo "Código Azul". A continuación, se detallarán los
+                                criterios técnicos y las consideraciones que hemos tenido en cuenta para llevar a cabo
+                                esta
+                                implementación
+                            </p>
+                            <iframe class="videoYoutubeModal" src="https://www.youtube.com/embed/nyaAW60Vbw8"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen>
+                            </iframe>
+
+                        </article>
+                    </div>
+                </div>
+
+                <div id="modal-panol-app" class="modal">
+                    <div class="modal-contenido">
+                        <span class="cerrar">&times;</span>
+                        <h2 class="titleProyect">Pañol App</h2>
+                        <article class="containerArticle">
+                            <p class="textModal">
+                                TallerApp es una aplicación diseñada para la gestión eficiente de herramientas en
+                                talleres.
+                                Proporciona una solución integral que simplifica la realización de pedidos y el control
+                                de
+                                stock, mejorando así la productividad y reduciendo el tiempo dedicado a la gestión de
+                                herramientas. Sus funciones incluyen:
+
+                                <br></br>
+                                Login Exclusivo para Administradores: Garantiza que solo los usuarios autorizados tengan
+                                acceso, evitando la entrada de usuarios no deseados.
+                                <br></br>
+                                Visualización del Stock Disponible: Facilita la observación clara y rápida de las
+                                herramientas disponibles.
+                                <br></br>
+                                Interfaz de Usuario Amigable: La página principal ofrece un formulario intuitivo donde
+                                se
+                                presentan todas las herramientas disponibles y se solicitan los datos necesarios para
+                                realizar un pedido.
+                                <br></br>
+                                Seguimiento de Facturas Pendientes: Permite un seguimiento eficiente de las facturas aún
+                                no
+                                procesadas.
+                                <br></br>
+                                Formulario para la Incorporación de Nuevas Herramientas: Simplifica el proceso de
+                                incorporación de nuevas herramientas al sistema.
+                                <br></br>
+
+                                Este sistema fue implementado inicialmente en la Institución Técnica Número 5 de
+                                Libertad.
+                                Sin embargo, debido a su eficacia, también se ha solicitado su implementación en las
+                                Instituciones Técnicas 3 y 1 de Merlo, con adaptaciones y mejoras específicas que
+                                actualmente se están diseñando y desarrollando.
+                            </p>
+                            <div class="imgPañol">
+                                <img class="imgItem" src="pañol1.jpeg" />
+                                <img class="imgItem" src="pañol2.png" />
+                                <img class="imgItem" src="pañol3.jpeg" />
+                                <img class="imgItem" src="pañol4.jpeg" />
+                                <img class="imgItem" src="pañol5.jpeg" />
+                                <img class="imgItem" src="pañol6.jpeg" />
+                            </div>
+                        </article>
+                    </div>
+                </div>
 
                 <div id="modal-moebius" class="modal">
                     <div class="modal-contenido">
@@ -114,7 +239,7 @@
                                     <img src="moebius.jpg" alt="Moebius Logo">
                                     <div>
                                         <h2>Moebius - Turismo y Gestión de Servicios</h2>
-                                        <p class="time">Julio 2023 - Actualidad | Remoto 100%</p>
+                                        <p class="time">Julio 2023 - Septiembre 2025 | Remoto 100%</p>
                                     </div>
                                 </div>
 
@@ -348,7 +473,7 @@
             <img class="imgexplorer" src="imagen5.png" alt="FotoMate" title="FotoMate">
         </section>
 
-         <section class="reseñas">
+        <section class="reseñas">
 
             <div class="reseñas__imagen">
                 <img src="imagen4.png" alt="FotoMate" title="FotoMate">
@@ -358,19 +483,20 @@
 
                 <div class="reseña">
                     <h3 class="reseña__nombre">
-                        Denisse Molina (Soporte en integraciones y QA tester)
+                        Denisse Molina Moebius (Soporte en integraciones y QA tester)
                     </h3>
                     <p class="reseña__texto">
                         Trabajar con Maximiliano fue una experiencia muy grata.
                         Es una persona con gran calidad humana, siempre dispuesta a ayudar
                         y a mantener un ambiente positivo en el equipo.
                     </p>
-                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                    <a class="reseña__contacto" href="https://www.linkedin.com/in/denisse-molina-l-30a44652/"
+                        target="_blank">Contacto</a>
                 </div>
 
                 <div class="reseña">
                     <h3 class="reseña__nombre">
-                        Dario Condori (Desarrollador Backend)
+                        Dario Condori Moebius (Desarrollador Backend)
                     </h3>
                     <p class="reseña__texto">
                         Trabajamos juntos en Moebius donde él se encargó del Frontend (Angular)
@@ -379,12 +505,13 @@
                         para integrar nuestros trabajos.
                         Es un colega confiable y un profesional con sólidos conocimientos en Angular.
                     </p>
-                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                    <a class="reseña__contacto" href="https://www.linkedin.com/in/dario-condori-7329a79/"
+                        target="_blank">Contacto</a>
                 </div>
 
                 <div class="reseña">
                     <h3 class="reseña__nombre">
-                        Juan Pablo Villalba (React Native Dev)
+                        Juan Pablo Villalba Petzify (React Native Dev)
                     </h3>
                     <p class="reseña__texto">
                         Maximiliano Dos Santos es un compañero de equipo eficaz, que maneja un gran nivel en
@@ -394,12 +521,13 @@
                         Es fácil trabajar a su lado; destaco su compromiso al nunca fallar en una entrega, por más
                         complicada que esta sea.
                     </p>
-                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                    <a class="reseña__contacto" href="https://www.linkedin.com/in/juanpablovillalba/"
+                        target="_blank">Contacto</a>
                 </div>
 
                 <div class="reseña">
                     <h3 class="reseña__nombre">
-                        Ramon Diaz (Soporte IT – Tester Manual QA)
+                        Ramon Diaz Universidad (Soporte IT – Tester Manual QA)
                     </h3>
                     <p class="reseña__texto">
                         Me complace recomendar a Maximiliano por su destacado desempeño
@@ -411,7 +539,8 @@
                         Su dedicación y disposición para ayudar fueron notables.
                         Fue un placer colaborar con él y aprender de su experiencia.
                     </p>
-                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+                    <!--                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
+-->
                 </div>
 
             </div>
@@ -475,6 +604,7 @@
                 e.target.style.display = "none";
             }
         });
+
     </script>
 
 </body>
