@@ -1,612 +1,863 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <title>Portafolio Maximiliano</title>
-    <link rel="stylesheet" href="estilos.css">
+    <title>Portafolio Windows 7 Interactivo</title>
+    <style>
+        /* --- CSS GENERAL --- */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('./old.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            user-select: none;
+            height: 100vh;
+        }
+
+        /* --- ICONOS DEL ESCRITORIO --- */
+        .desktop-icons {
+            display: flex;
+            flex-direction: column; /* <-- Hace que los elementos fluyan verticalmente */
+            gap: 10px;
+            padding: 10px;
+            width: fit-content;
+            height: 90vh; /* <-- Define la altura máxima de la columna */
+            flex-wrap: wrap; /* <-- Permite que los elementos pasen a una nueva columna cuando se supera la altura */
+            /* El background: red; lo puedes eliminar, solo era para debug */
+        }
+
+        .icon {
+            text-align: center;
+            cursor: default;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            width: 74px;
+            padding: 5px;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Efecto Hover (pasar el mouse) */
+        .icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Efecto Seleccionado (clic simple) */
+        .icon.selected {
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .icon img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 2px;
+            pointer-events: none;
+            /* Evita arrastrar la imagen fantasma */
+        }
+
+        .icon div {
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        /* --- VENTANAS (ESTILO AERO) --- */
+        .window {
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 600px;
+            height: 400px;
+            background-color: rgba(240, 240, 240, 0.85);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            z-index: 10;
+            transition: width 0.2s, height 0.2s, top 0.2s, left 0.2s;
+            /* Animación suave al maximizar */
+        }
+
+        /* Clase para cuando está maximizada */
+        .window.maximized {
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: calc(100% - 40px) !important;
+            /* Restamos la barra de tareas */
+            border-radius: 0;
+        }
+
+        .title-bar {
+            padding: 6px 10px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%);
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: default;
+        }
+
+        .window.maximized .title-bar {
+            border-radius: 0;
+        }
+
+        .title-text {
+            font-weight: bold;
+            color: #333;
+            font-size: 13px;
+            text-shadow: 0 0 10px white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .control-btn {
+            width: 28px;
+            height: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+            background: linear-gradient(to bottom, #fff, #e6e6e6);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.1s;
+        }
+
+        .control-btn:hover {
+            box-shadow: 0 0 3px rgba(0, 100, 255, 0.5);
+            border-color: #3c7fb1;
+        }
+
+        .control-btn:active {
+            background: #ccc;
+        }
+
+        .close-btn {
+            background: #e81123;
+            color: white;
+            border-color: #b00b18;
+        }
+
+        .close-btn:hover {
+            background: #f04e5d;
+            box-shadow: 0 0 3px #f04e5d;
+            border-color: #b00b18;
+        }
+
+        /* Cuerpo de la ventana */
+        .window-body {
+            background-color: white;
+            margin: 0 4px 4px 4px;
+            flex: 1;
+            /* Ocupa el resto del espacio */
+            border: 1px solid #a9b6cc;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Barra lateral (Sidebar) */
+        .sidebar {
+            width: 140px;
+            background: #f0f4fa;
+            border-right: 1px solid #dae5f0;
+            padding: 10px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 5px;
+        }
+
+        .sidebar li {
+            padding: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .sidebar li:hover {
+            background: #e5f3fb;
+            border: 1px solid #7da2ce;
+            padding: 3px;
+            border-radius: 2px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-y: auto;
+            background: white;
+        }
+
+        /* Notepad Específico */
+        .notepad-area {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            font-family: 'Consolas', monospace;
+            padding: 10px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        /* --- BARRA DE TAREAS --- */
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, rgba(20, 30, 45, 0.9) 0%, rgba(10, 10, 10, 1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 9999;
+        }
+
+        .start-button {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+        }
+
+        .start-button img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .start-button:hover {
+            filter: brightness(1.2);
+        }
+
+        .clock {
+            color: white;
+            font-size: 12px;
+            margin-right: 15px;
+            text-align: center;
+            line-height: 1.2;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .clock:hover {
+            background: rgba(255, 255, 255, 0.1);
+            cursor: default;
+        }
+
+        /* --- MENÚ INICIO (OCULTO) --- */
+        .start-menu {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            width: 300px;
+            height: 400px;
+            background-color: rgba(240, 240, 240, 0.95);
+            border: 1px solid #777;
+            border-top-right-radius: 8px;
+            border-top-left-radius: 8px;
+            display: none;
+            z-index: 9998;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+
+        .user-pic {
+            width: 40px;
+            height: 40px;
+            background: #ccc;
+            border-radius: 5px;
+            border: 2px solid white;
+            position: absolute;
+            top: -20px;
+            right: 20px;
+        }
+
+        /* --- ESTILOS INTERNOS DE LA VENTANA DE EXPERIENCIA --- */
+        .folder-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        /* Iconos dentro de la ventana (similares a los del escritorio pero texto oscuro) */
+        .win-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            padding: 5px;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .win-icon:hover {
+            background-color: #e5f3fb;
+            border: 1px solid #70c0e7;
+        }
+
+        .win-icon img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+        }
+
+        .win-icon span {
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+            word-wrap: break-word;
+        }
+
+        /* Barra de navegación estilo explorador (El botón atrás) */
+        .explorer-nav {
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #dae5f0;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn:hover {
+            background-color: #e5f3fb;
+            border-color: #70c0e7;
+            color: #0066cc;
+        }
+
+        /* El área donde se muestra el texto del trabajo */
+        .file-content {
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* --- ESTILOS PARA LAS TARJETAS DE RECOMENDACIÓN --- */
+.recommendation-card {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.recommendation-card h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #004d99; /* Azul de Windows */
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.recommendation-card p {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #333;
+}
+
+.recommendation-card .source-info {
+    display: block;
+    text-align: right;
+    font-size: 11px;
+    color: #666;
+}
+
+/* Asegura que el contenido se pueda desplazar si hay muchas recomendaciones */
+.main-content {
+    /* Mantenemos el flex: 1 y solo aseguramos el overflow */
+    overflow-y: auto; 
+}
+
+
+    </style>
 </head>
 
 <body>
-    <div id="container">
-        <section class="home">
-            <div class="izquierda">
-                <article class="scroll-reveal fade-left">
-                    <img alt="maxi" src="imagen1.png" title="MaxiDev" />
-                </article>
-            </div>
-            <div class="derecha">
-                <article class="sobremi scroll-reveal fade-up">
-                    <h1>Maximiliano</h1>
-                    <h3>FullStack Developer</h3>
-                    <!--
-                    <ul>
-                        <li class="scroll-reveal fade-up">
-                            <a>Carta de precentacion</a>
-                        </li>
-                        <li class="scroll-reveal fade-up">
-                            <a>Video de entrevista</a>
-                        </li>
-                        <li class="scroll-reveal fade-up">
-                            <a>Me recomendaron</a>
-                        </li>
-                    </ul>
-                    <button>Descargar CV</button>
-                    -->
-                    <ul class="stackClass">
-                        <li class="angular">Angular</li>
-                        <li class="react">React</li>
-                        <li class="javascript">JavaScript</li>
-                        <li class="node">Node</li>
-                        <li class="mongodb">MongoDB</li>
-                        <li class="php">Php</li>
-                        <li class="phpmyadmin">PhpMyAdmin</li>
-                    </ul>
-                </article>
-            </div>
-        </section>
-        <section class="carta scroll-reveal fade-right">
-            <article class="fotolibre">
-                <img alt="fotoLibro" title="fotoLibro" src="imagen2.png" />
-            </article>
 
-            <div class="pergamino-container">
-                <img src="pergaminoCerrado.png" class="pergamino-closed" alt="Pergamino enrollado">
-                <img src="manuscrito1.png" class="pergamino-open" alt="Pergamino abierto">
-            </div>
-        </section>
-
-        <!--
-         <section class="video">
-            <iframe class="videoYoutube" src="https://www.youtube.com/embed/pyxlrk2lQ78" title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen>
-            </iframe>
-
-            <img alt="precentacion" title="precentacion" src="imagen3.png" />
-        </section> 
-       -->
-
-        <section class="proyectos">
-            <div class="explorer">
-                <div class="topSection">
-                    <article class="pestaña">
-                        <div class="pestañaTab">
-                            <p>👨🏻‍💻 Experiencia</p>
-                        </div>
-                    </article>
-                    <ul class="nav">
-                        <li>-</li>
-                        <li>=</li>
-                        <li class="cruz" onclick="alertaCruz()">X</li>
-                    </ul>
-                </div>
-                <secton class="tools"></secton>
-                <secton class="cuerpo">
-                    <article></article>
-                    <div class="cuerpodiv">
-                        <ul>
-                            <li>
-                                <img class="cuerpoImg" src="folder.png" />
-                                <a href="#" data-modal="modal-moebius">Moebius</a>
-                            </li>
-                            <li>
-                                <img class="cuerpoImg" src="folder.png" />
-                                <a href="#" data-modal="modal-legalrun">LegalRun</a>
-                            </li>
-                            <li>
-                                <img class="cuerpoImg" src="folder.png" />
-                                <a href="#" data-modal="modal-petzify">Petzify</a>
-                            </li>
-
-                        </ul>
-                        <section class="proyectosExplorer">
-                            <h2>Proyectos</h2>
-                            <div class="proyectosContainer">
-                                <div class="item">
-                                    <img class="imgItem" src="1.png" />
-                                    <a href="#" data-modal="modal-codigo-azul">Codigo Azul</a>
-                                </div>
-                                <div class="item">
-                                    <img class="imgItem" src="2.png" />
-                                    <a href="#" data-modal="modal-panol-app">Pañol App</a>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </secton>
-
-                <div id="modal-codigo-azul" class="modal">
-                    <div class="modal-contenido">
-                        <span class="cerrar">&times;</span>
-                        <h2 class="titleProyect">OLIMPÍADA NACIONAL DE ETP 2023</h2>
-                        <article class="containerArticle">
-                            <p class="textModal">
-                                Nuestra tarea consiste en crear una solución digital para el protocolo médico conocido
-                                como
-                                "Código Azul", que se caracteriza por activar dos alarmas que requieren la presencia de
-                                personal médico. Esta solución debe permitir el acceso mediante un sistema de
-                                autenticación
-                                basado en usuario y contraseña, ofreciendo una serie de funcionalidades clave:
-                                <br></br>Crear áreas médicas: La aplicación debe permitir la creación de áreas médicas,
-                                lo
-                                que
-                                implica configurar espacios específicos para el manejo de situaciones médicas críticas.
-                                <br></br>Asignar personal: Debe ser posible asignar y gestionar el personal médico a las
-                                áreas
-                                correspondientes, asegurando una adecuada distribución de recursos humanos.
-                                <br></br>Asignar pacientes: La solución debe facilitar la asignación de pacientes a las
-                                áreas
-                                médicas, garantizando una atención eficiente y oportuna.
-                                <br></br>Prender alarmas: En cada área médica, se debe tener la capacidad de activar
-                                alarmas
-                                para
-                                alertar sobre situaciones médicas críticas en curso, lo que requerirá una interfaz
-                                intuitiva
-                                y efectiva.
-                                <br></br>
-                                Este proyecto se ha planteado con un plazo de ejecución de una semana, lo que exige una
-                                selección cuidadosa de tecnologías y estrategias de desarrollo para cumplir con los
-                                requisitos y expectativas del protocolo "Código Azul". A continuación, se detallarán los
-                                criterios técnicos y las consideraciones que hemos tenido en cuenta para llevar a cabo
-                                esta
-                                implementación
-                            </p>
-                            <iframe class="videoYoutubeModal" src="https://www.youtube.com/embed/nyaAW60Vbw8"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                allowfullscreen>
-                            </iframe>
-
-                        </article>
-                    </div>
-                </div>
-
-                <div id="modal-panol-app" class="modal">
-                    <div class="modal-contenido">
-                        <span class="cerrar">&times;</span>
-                        <h2 class="titleProyect">Pañol App</h2>
-                        <article class="containerArticle">
-                            <p class="textModal">
-                                TallerApp es una aplicación diseñada para la gestión eficiente de herramientas en
-                                talleres.
-                                Proporciona una solución integral que simplifica la realización de pedidos y el control
-                                de
-                                stock, mejorando así la productividad y reduciendo el tiempo dedicado a la gestión de
-                                herramientas. Sus funciones incluyen:
-
-                                <br></br>
-                                Login Exclusivo para Administradores: Garantiza que solo los usuarios autorizados tengan
-                                acceso, evitando la entrada de usuarios no deseados.
-                                <br></br>
-                                Visualización del Stock Disponible: Facilita la observación clara y rápida de las
-                                herramientas disponibles.
-                                <br></br>
-                                Interfaz de Usuario Amigable: La página principal ofrece un formulario intuitivo donde
-                                se
-                                presentan todas las herramientas disponibles y se solicitan los datos necesarios para
-                                realizar un pedido.
-                                <br></br>
-                                Seguimiento de Facturas Pendientes: Permite un seguimiento eficiente de las facturas aún
-                                no
-                                procesadas.
-                                <br></br>
-                                Formulario para la Incorporación de Nuevas Herramientas: Simplifica el proceso de
-                                incorporación de nuevas herramientas al sistema.
-                                <br></br>
-
-                                Este sistema fue implementado inicialmente en la Institución Técnica Número 5 de
-                                Libertad.
-                                Sin embargo, debido a su eficacia, también se ha solicitado su implementación en las
-                                Instituciones Técnicas 3 y 1 de Merlo, con adaptaciones y mejoras específicas que
-                                actualmente se están diseñando y desarrollando.
-                            </p>
-                            <div class="imgPañol">
-                                <img class="imgItem" src="pañol1.jpeg" />
-                                <img class="imgItem" src="pañol2.png" />
-                                <img class="imgItem" src="pañol3.jpeg" />
-                                <img class="imgItem" src="pañol4.jpeg" />
-                                <img class="imgItem" src="pañol5.jpeg" />
-                                <img class="imgItem" src="pañol6.jpeg" />
-                            </div>
-                        </article>
-                    </div>
-                </div>
-
-                <div id="modal-moebius" class="modal">
-                    <div class="modal-contenido">
-                        <div class="topSection">
-                            <article class="pestaña">
-                                <div class="pestañaTab">
-                                    <p>👨🏻‍💻 Moebius</p>
-                                </div>
-                            </article>
-                            <ul class="nav">
-                                <span class="cerrar">&times;</span>
-                            </ul>
-                        </div>
-
-                        <section class="tools"></section>
-
-                        <div class="proyectoInfo">
-                            <div class="infoContainer">
-
-                                <div class="empresaHeader">
-                                    <img src="moebius.jpg" alt="Moebius Logo">
-                                    <div>
-                                        <h2>Moebius - Turismo y Gestión de Servicios</h2>
-                                        <p class="time">Julio 2023 - Septiembre 2025 | Remoto 100%</p>
-                                    </div>
-                                </div>
-
-                                <p>
-                                    Trabajé como desarrollador frontend en Moebius, una empresa especializada en la
-                                    gestión de servicios turísticos y hoteleros. Estuve a cargo del desarrollo completo
-                                    del módulo de turismo y transporte, el cual se integró directamente con la sección
-                                    hotelera ya existente. Lideré el desarrollo frontend desde cero, trabajando en
-                                    conjunto con un desarrollador backend y dos QA testers para asegurar una
-                                    implementación sólida, estable y alineada con las necesidades del producto.
-                                </p>
-
-                                <div class="logros">
-
-
-                                    <h3>Logros y Resultados</h3>
-
-                                    <ul>
-                                        <li>
-                                            <strong>Escalabilidad del frontend:</strong>
-                                            Redujimos en un <b>35%</b> el tiempo de desarrollo de nuevas vistas y
-                                            aumentamos la reutilización de componentes en un <b>50%</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Optimización de validaciones y carga de archivos:</strong>
-                                            Eliminé los casos de carga infinita en un <b>100%</b> y reduje los tiempos
-                                            de subida en un <b>70%</b> en archivos grandes, mejorando más de <b>15
-                                                módulos</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Mejora visual y consistencia del diseño:</strong>
-                                            Aumentamos la claridad visual en un <b>40%</b> y disminuimos consultas de
-                                            soporte en un <b>25%</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Integración eficiente con backend PHP/MySQL:</strong>
-                                            Mejoré tiempos de carga en un <b>30%</b> y reduje errores de comunicación en
-                                            un <b>60%</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Documentación interna completa:</strong>
-                                            La curva de aprendizaje bajó un <b>45%</b> y se ahorraron más de <b>3 horas
-                                                semanales</b> en soporte interno.
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="modal-legalrun" class="modal">
-                    <div class="modal-contenido">
-
-                        <div class="topSection">
-                            <article class="pestaña">
-                                <div class="pestañaTab">
-                                    <p>👨🏻‍💻 LegalRun</p>
-                                </div>
-                            </article>
-                            <ul class="nav">
-                                <span class="cerrar">&times;</span>
-                            </ul>
-                        </div>
-
-                        <section class="tools"></section>
-
-
-                        <div class="proyectoInfo">
-                            <div class="infoContainer">
-
-                                <div class="empresaHeader">
-                                    <img src="legalrun_logo.jpg" alt="Moebius Logo">
-                                    <div>
-                                        <h2>LegalRun - Gestión de Casos Legales</h2>
-                                        <p class="time">Contrato por horas | Remoto 100%</p>
-                                    </div>
-                                </div>
-
-                                <p>
-                                    Trabajé como desarrollador full stack freelance en LegalRun, una plataforma
-                                    utilizada por firmas legales para gestionar casos en toda Latinoamérica. Mis tareas
-                                    incluían el desarrollo de nuevas funcionalidades, la mejora de módulos existentes y
-                                    la resolución de incidencias críticas en producción.<br><br>
-                                    Recibía los requerimientos y reportes directamente del CEO y debía priorizar
-                                    velocidad, precisión y estabilidad. Además, apoyé a nuevos desarrolladores del
-                                    equipo, guiándolos en su adaptación y resolución de bugs iniciales.
-                                </p>
-
-                                <div class="logros">
-
-
-                                    <h3>Logros y Resultados</h3>
-
-                                    <ul>
-                                        <li>
-                                            <strong>Resolución rápida de incidencias críticas:</strong>
-                                            Resolví bugs en producción en menos de <b>5 horas</b> en promedio,
-                                            reduciendo tiempos de bloqueo del sistema.
-                                        </li>
-
-                                        <li>
-                                            <strong>Modal interactiva para documentos legales:</strong>
-                                            Desarrollé una visualización centralizada de archivos adjuntos, reduciendo
-                                            el tiempo de búsqueda de documentos en un <b>40%</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Capacitación a nuevos desarrolladores:</strong>
-                                            Reduje la curva de adaptación de nuevos devs en un <b>50%</b>, ayudándolos a
-                                            resolver sus primeros bugs y entender la arquitectura del sistema.
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="modal-petzify" class="modal">
-                    <div class="modal-contenido">
-
-                        <div class="topSection">
-                            <article class="pestaña">
-                                <div class="pestañaTab">
-                                    <p>👨🏻‍💻 Petzify</p>
-                                </div>
-                            </article>
-                            <ul class="nav">
-                                <span class="cerrar">&times;</span>
-                            </ul>
-                        </div>
-
-                        <section class="tools"></section>
-
-
-                        <div class="proyectoInfo">
-                            <div class="infoContainer">
-
-                                <div class="empresaHeader">
-                                    <img src="petzify.jpg" alt="Petzify Logo">
-                                    <div>
-                                        <h2>Petzify App – Startup Propia</h2>
-                                        <p class="time">Marzo 2023 - Diciembre 2023 · 10 meses | Híbrido</p>
-                                    </div>
-                                </div>
-
-                                <p>
-                                    Fui co-fundador y desarrollador frontend de Petzify, una aplicación tipo red social
-                                    enfocada
-                                    exclusivamente en mascotas. Participé en todas las etapas del proyecto:
-                                    planificación, desarrollo
-                                    full stack, diseño UI/UX, testing, marketing y estrategia de lanzamiento.
-                                    Trabajé en conjunto con mi equipo para crear un producto estable, escalable y
-                                    visualmente atractivo,
-                                    integrando funcionalidades avanzadas como geolocalización, tiempo real y
-                                    marketplace.
-                                </p>
-
-                                <div class="logros">
-
-
-                                    <h3>Logros y Resultados</h3>
-
-                                    <ul>
-                                        <li>
-                                            <strong>Desarrollo Full Stack completo del producto:</strong>
-                                            Implementé Node.js, Express.js y MongoDB, alcanzando una arquitectura
-                                            estable con
-                                            <b>99% de tiempo de actividad</b> durante el ciclo de pruebas.
-                                        </li>
-
-                                        <li>
-                                            <strong>Autenticación y seguridad:</strong>
-                                            Integré JWT logrando un sistema de login seguro con una reducción de
-                                            intentos fallidos
-                                            del <b>65%</b> tras optimizar validaciones y manejo de sesiones.
-                                        </li>
-
-                                        <li>
-                                            <strong>Mapa en tiempo real para mascotas perdidas:</strong>
-                                            Agregué Google Maps API y WebSockets, logrando actualizaciones instantáneas
-                                            y reduciendo
-                                            el tiempo de reporte de pérdida en un <b>70%</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Desarrollo Mobile y Web:</strong>
-                                            Construí la app en React.js y React Native (Expo), permitiendo que el MVP
-                                            funcione en
-                                            <b>Android, iOS y Web</b> sin duplicación de código, reduciendo tiempos de
-                                            desarrollo en un
-                                            <b>40%</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Almacenamiento y despliegue en AWS:</strong>
-                                            Configuré Amazon S3 y ECS, mejorando la carga de archivos grandes en un
-                                            <b>55%</b> respecto
-                                            a las primeras pruebas locales.
-                                        </li>
-
-                                        <li>
-                                            <strong>UI/UX y crecimiento de la comunidad:</strong>
-                                            Diseñé las interfaces clave y participamos en la estrategia de marketing,
-                                            logrando más de
-                                            <b>800 usuarios</b> en la etapa beta y aumentando la retención semanal en un
-                                            <b>30%</b>.
-                                        </li>
-
-                                        <li>
-                                            <strong>Diferenciación frente al mercado:</strong>
-                                            Creamos la primera app donde las mascotas eran protagonistas, lo que elevó
-                                            el interés
-                                            del usuario en un <b>60%</b> respecto a los benchmarks analizados.
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <img class="imgexplorer" src="imagen5.png" alt="FotoMate" title="FotoMate">
-        </section>
-
-        <section class="reseñas">
-
-            <div class="reseñas__imagen">
-                <img src="imagen4.png" alt="FotoMate" title="FotoMate">
-            </div>
-
-            <div class="reseñas__lista">
-
-                <div class="reseña">
-                    <h3 class="reseña__nombre">
-                        Denisse Molina Moebius (Soporte en integraciones y QA tester)
-                    </h3>
-                    <p class="reseña__texto">
-                        Trabajar con Maximiliano fue una experiencia muy grata.
-                        Es una persona con gran calidad humana, siempre dispuesta a ayudar
-                        y a mantener un ambiente positivo en el equipo.
-                    </p>
-                    <a class="reseña__contacto" href="https://www.linkedin.com/in/denisse-molina-l-30a44652/"
-                        target="_blank">Contacto</a>
-                </div>
-
-                <div class="reseña">
-                    <h3 class="reseña__nombre">
-                        Dario Condori Moebius (Desarrollador Backend)
-                    </h3>
-                    <p class="reseña__texto">
-                        Trabajamos juntos en Moebius donde él se encargó del Frontend (Angular)
-                        y yo del Backend (Laravel).
-                        Valoro su enfoque colaborativo, siempre dispuesto a encontrar la solución
-                        para integrar nuestros trabajos.
-                        Es un colega confiable y un profesional con sólidos conocimientos en Angular.
-                    </p>
-                    <a class="reseña__contacto" href="https://www.linkedin.com/in/dario-condori-7329a79/"
-                        target="_blank">Contacto</a>
-                </div>
-
-                <div class="reseña">
-                    <h3 class="reseña__nombre">
-                        Juan Pablo Villalba Petzify (React Native Dev)
-                    </h3>
-                    <p class="reseña__texto">
-                        Maximiliano Dos Santos es un compañero de equipo eficaz, que maneja un gran nivel en
-                        programación de varios tipos.
-                        Tiene una facilidad de aprendizaje y adaptación que le permiten reestructurar proyectos según la
-                        necesidad.
-                        Es fácil trabajar a su lado; destaco su compromiso al nunca fallar en una entrega, por más
-                        complicada que esta sea.
-                    </p>
-                    <a class="reseña__contacto" href="https://www.linkedin.com/in/juanpablovillalba/"
-                        target="_blank">Contacto</a>
-                </div>
-
-                <div class="reseña">
-                    <h3 class="reseña__nombre">
-                        Ramon Diaz Universidad (Soporte IT – Tester Manual QA)
-                    </h3>
-                    <p class="reseña__texto">
-                        Me complace recomendar a Maximiliano por su destacado desempeño
-                        en la resolución de bugs en el proyecto para el cual colaboré.
-                        Aunque no trabajé directamente bajo su supervisión, tuve la oportunidad
-                        de tratar con el código que él entregaba antes de producción.
-                        Maximiliano demostró una habilidad excepcional para comprender y solucionar
-                        problemas técnicos de manera rápida y efectiva.
-                        Su dedicación y disposición para ayudar fueron notables.
-                        Fue un placer colaborar con él y aprender de su experiencia.
-                    </p>
-                    <!--                    <a class="reseña__contacto" href="#" target="_blank">Contacto</a>
--->
-                </div>
-
-            </div>
-        </section>
-
+    <div id="start-menu" class="start-menu">
+        <div class="user-pic" style="background: orange;"></div>
+        <h3>Invitado</h3>
+        <hr>
+        <p style="padding: 5px; hover:background: #ccc; cursor: pointer">Documentos</p>
+        <p style="padding: 5px; hover:background: #ccc; cursor: pointer">Imágenes</p>
+        <p style="padding: 5px; hover:background: #ccc; cursor: pointer">Juegos</p>
+        <div style="position: absolute; bottom: 10px; right: 10px;">
+            <button onclick="alert('No se puede apagar, ¡es una web!')">Apagar sistema</button>
+        </div>
     </div>
 
-    <audio id="audioPergamino" src="musicaPergamino.mpeg"></audio>
+    <div class="desktop-icons" id="desktop-area">
+
+        <div class="icon" id="icon-profile" onclick="selectIcon('icon-profile', event)"
+            ondblclick="openWindow('win-profile')">
+            <img src="folder2.png" alt="Carpeta">
+            <div style=" padding-left: 15px;">Recomendaciones</div>
+        </div>
+
+        <div class="icon" id="icon-exp" onclick="selectIcon('icon-exp', event)" ondblclick="openWindow('win-exp')">
+            <img src="folder2.png" alt="Carpeta">
+            <div>Experiencia</div>
+        </div>
+
+        <div class="icon" id="icon-letter" onclick="selectIcon('icon-letter', event)"
+            ondblclick="openWindow('win-letter')">
+            <img src="https://cdn-icons-png.flaticon.com/512/2965/2965335.png" alt="Txt">
+            <div>Carta.txt</div>
+        </div>
+
+        <div class="icon" id="icon-cv" onclick="selectIcon('icon-cv', event)" ondblclick="openWindow('win-cv')">
+            <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF">
+            <div>CV Maximiliano FullStack.pdf</div>
+        </div>
+
+        <a href="https://www.linkedin.com/in/maximilianodossantos/" target="_blank" style="text-decoration: none; color: white;" class="icon" id="icon-trash" onclick="selectIcon('icon-trash', event)">
+            <img src="logotipo-de-linkedin.png" alt="Papelera">
+            <div>Linkedin</div>
+        </a>
+
+        <a href="https://github.com/Maximiliano17" target="_blank" style="text-decoration: none; color: white;" class="icon" id="icon-trash" onclick="selectIcon('icon-trash', event)">
+            <img src="github.png" alt="Papelera">
+            <div>Github</div>
+        </a>
+
+        <div class="icon" id="icon-trash" onclick="selectIcon('icon-trash', event)">
+            <img src="papelera-de-reciclaje.png" alt="Papelera">
+            <div>Papelera</div>
+        </div>
+        
+    </div>
+
+    <div id="win-cv" class="window" style="top: 10%; left: 15%; width: 800px; height: 550px;"
+        onmousedown="focusWindow('win-cv')">
+        <div class="title-bar" onmousedown="startDrag(event, 'win-cv')">
+            <div class="title-text">
+                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" width="16">
+                Visor de PDF - CV Maximiliano FullStack.pdf
+            </div>
+            <div class="window-controls">
+                <div class="control-btn" onclick="minimizeWindow('win-cv')">_</div>
+                <div class="control-btn" onclick="toggleMaximize('win-cv')">□</div>
+                <div class="control-btn close-btn" onclick="closeWindow('win-cv')">X</div>
+            </div>
+        </div>
+
+        <div class="window-body" style="margin: 0;">
+            <iframe src="CV Maximiliano FullStack.pdf" style="width: 100%; height: 100%; border: none;"
+                title="Curriculum Vitae Maximiliano Dos Santos">
+                Tu navegador no puede mostrar este PDF. Puedes <a href="CV Maximiliano FullStack.pdf"
+                    target="_blank">descargarlo aquí</a>.
+            </iframe>
+        </div>
+    </div>
+
+    <div id="win-profile" class="window" onmousedown="focusWindow('win-profile')" style="width: 700px; height: 500px;">
+    <div class="title-bar" onmousedown="startDrag(event, 'win-profile')">
+        <div class="title-text">
+            <img src="folder2.png" width="16">
+            Recomendaciones
+        </div>
+        <div class="window-controls">
+            <div class="control-btn" onclick="minimizeWindow('win-profile')">_</div>
+            <div class="control-btn" onclick="toggleMaximize('win-profile')">□</div>
+            <div class="control-btn close-btn" onclick="closeWindow('win-profile')">X</div>
+        </div>
+    </div>
+    <div class="window-body">
+        <div class="sidebar">
+            <ul>
+                <li style="font-weight:bold">Todas las Recomendaciones</li>
+                <li>Por Rol</li>
+                <li>Por Proyecto</li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <h3>Archivos de Recomendación <small style="color: gray;">(4 elementos)</small></h3>
+            <hr>
+            
+            <div class="recommendation-card">
+                <h4>Denisse Molina <small>(Soporte en integraciones y QA tester)</small> [cite: 51]</h4>
+                <p style="font-style: italic;">"Trabajar con Maximiliano fue una experiencia muy grata. Es una persona con gran calidad humana, siempre dispuesta a ayudar y a mantener un ambiente positivo en el equipo." [cite: 51, 52]</p>
+                <span class="source-info">Fuente: Moebius</span>
+            </div>
+
+            <div class="recommendation-card">
+                <h4>Darío Condori <small>(Desarrollador Backend)</small> [cite: 53]</h4>
+                <p style="font-style: italic;">"Trabajamos juntos en Moebius donde él se encargó del Frontend (Angular) y yo del Backend (Laravel). Valoro su enfoque colaborativo, siempre dispuesto a encontrar la solución para integrar nuestros trabajos. Es un colega confiable y un profesional con sólidos conocimientos en Angular." [cite: 53, 54, 55]</p>
+                <span class="source-info">Fuente: Moebius</span>
+            </div>
+            
+            <div class="recommendation-card">
+                <h4>Ramón Diaz <small>(Soporte IT – Tester Manual QA)</small> [cite: 56]</h4>
+                <p style="font-style: italic;">"Me complace recomendar a Maximiliano por su destacado desempeño en la resolución de bugs en el proyecto para el cual colaboré... Maximiliano demostró una habilidad excepcional para comprender y solucionar problemas técnicos de manera rápida y efectiva. Su dedicación y disposición para ayudar fueron notables." [cite: 56, 57, 58, 59]</p>
+                <span class="source-info">Fuente: Colaboración en Proyecto</span>
+            </div>
+
+            <div class="recommendation-card">
+                <h4>Juan Pablo Villalba <small>(React Native Dev)</small></h4>
+                <p style="font-style: italic;">"Maximiliano Dos Santos es un compañero de equipo eficaz, que maneja un gran nivel en programación de varios tipos. Tiene una facilidad de aprendizaje y adaptación que le permiten reestructurar proyectos según la necesidad. Es fácil trabajar a su lado; destaco su compromiso al nunca fallar en una entrega, por más complicada que esta sea."</p>
+                <span class="source-info">Fuente: Petzify</span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <div id="win-exp" class="window" style="top: 20%; left: 25%;" onmousedown="focusWindow('win-exp')">
+        <div class="title-bar" onmousedown="startDrag(event, 'win-exp')">
+            <div class="title-text">
+                <img src="folder2.png" width="16">
+                Experiencia Laboral
+            </div>
+            <div class="window-controls">
+                <div class="control-btn" onclick="minimizeWindow('win-exp')">_</div>
+                <div class="control-btn" onclick="toggleMaximize('win-exp')">□</div>
+                <div class="control-btn close-btn" onclick="closeWindow('win-exp')">X</div>
+            </div>
+        </div>
+
+        <div class="window-body">
+            <div class="sidebar">
+                <ul>
+                    <li onclick="showFolderView()">Escritorio</li>
+                    <li onclick="showFolderView()" style="font-weight:bold">Mis Trabajos</li>
+                    <li>Red Local</li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+
+                <div id="exp-nav" class="explorer-nav" style="display: none;">
+                    <div class="back-btn" onclick="showFolderView()" title="Atrás">←</div>
+                    <span id="exp-path-text">Detalles</span>
+                </div>
+
+                <div id="view-folders" class="folder-grid">
+
+                    <div class="win-icon" ondblclick="openJob('moebius')">
+                        <img src="folder2.png" alt="Folder">
+                        <span>Moebius</span>
+                    </div>
+
+                    <div class="win-icon" ondblclick="openJob('legalrun')">
+                        <img src="folder2.png" alt="Folder">
+                        <span>LegalRun</span>
+                    </div>
+
+                    <div class="win-icon" ondblclick="openJob('petzify')">
+                        <img src="folder2.png" alt="Folder">
+                        <span>Petzify App </span>
+                    </div>
+
+                </div>
+
+                <div id="view-details" class="file-content" style="display: none;">
+                    <h2 id="job-title" style="margin-top: 0;">Título</h2>
+                    <hr>
+                    <div id="job-desc">Descripción...</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="win-letter" class="window" style="top: 25%; left: 30%; width: 500px; height: 350px;"
+        onmousedown="focusWindow('win-letter')">
+        <div class="title-bar" onmousedown="startDrag(event, 'win-letter')">
+            <div class="title-text">
+                <img src="https://cdn-icons-png.flaticon.com/512/2965/2965335.png" width="16">
+                Carta de Presentación - Bloc de notas
+            </div>
+            <div class="window-controls">
+                <div class="control-btn" onclick="minimizeWindow('win-letter')">_</div>
+                <div class="control-btn" onclick="toggleMaximize('win-letter')">□</div>
+                <div class="control-btn close-btn" onclick="closeWindow('win-letter')">X</div>
+            </div>
+        </div>
+        <div class="window-body" style="flex-direction: column;">
+            <div style="background:white; padding: 2px 10px; border-bottom:1px solid #ccc; font-size:11px; color:#333;">
+                Archivo &nbsp; Edición &nbsp; Formato &nbsp; Ver &nbsp; Ayuda
+            </div>
+            <textarea class="notepad-area">
+Estimado equipo de contratación,
+
+Soy Maximiliano Dos Santos, un apasionado desarrollador Front-End con + dos años de experiencia, aunque se siente como toda una vida cuando has trabajado principalmente con Angular... (sí, lo sé, pero no me juzguen, ¡todos tenemos una historia difícil!).
+
+Durante este tiempo, he tenido el privilegio de liderar equipos, ayudando a mis compañeros a crecer, aprender y, sobre todo, a sobrevivir a los bugs más inesperados.
+
+Me encanta la tecnología, pero lo que realmente me motiva es el trabajo en equipo: compartir conocimientos, aportar soluciones creativas y construir productos que hagan la diferencia.
+
+Busco un entorno en el que pueda aportar mi experiencia, creatividad y, claro, mi "alto nivel de uso de IA"... digo, digo, mis habilidades en programación. 😉
+
+Si están buscando a alguien con energía, ganas de innovar y una buena dosis de humor para aliviar los días de deploy, me encantaría tener la oportunidad de conversar con ustedes.
+
+¡Hablemos pronto!
+
+Saludos,
+Maximiliano Dos Santos
+
+            </textarea>
+        </div>
+    </div>
+
+    <div class="taskbar">
+        <div class="start-button" onclick="toggleStartMenu()" title="Inicio">
+            <img src="WINDOWSlogo.png" />
+        </div>
+        <div class="clock" id="clock">12:00</div>
+    </div>
 
     <script>
-        const elements = document.querySelectorAll('.scroll-reveal');
-
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('show');
-                }
-            });
-        }, { threshold: 0.2 });
-
-        elements.forEach(el => observer.observe(el));
-
-        const pergamino = document.querySelector('.pergamino-container');
-        const audio = document.getElementById('audioPergamino');
-
-        pergamino.addEventListener('click', () => {
-            pergamino.classList.toggle('open');
-
-            if (pergamino.classList.contains('open')) {
-                audio.currentTime = 0;
-                audio.play();
-            } else {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-        });
-
-        function alertaCruz() {
-            alert("Que mala onda lo tuyo...");
+        // --- 1. LÓGICA DE SELECCIÓN DE ICONOS ---
+        function selectIcon(id, event) {
+            event.stopPropagation(); // Evita que el clic llegue al body y deseleccione
+            // 1. Quitar selección a todos
+            document.querySelectorAll('.icon').forEach(el => el.classList.remove('selected'));
+            // 2. Seleccionar el actual
+            document.getElementById(id).classList.add('selected');
         }
 
-        const links = document.querySelectorAll("a[data-modal]");
-        const botonesCerrar = document.querySelectorAll(".cerrar");
-
-        links.forEach(link => {
-            link.addEventListener("click", e => {
-                e.preventDefault();
-                const modalID = link.dataset.modal;
-                document.getElementById(modalID).style.display = "flex";
-            });
-        });
-
-        botonesCerrar.forEach(btn => {
-            btn.addEventListener("click", () => {
-                btn.closest(".modal").style.display = "none";
-            });
-        });
-
-        window.addEventListener("click", e => {
-            if (e.target.classList.contains("modal")) {
-                e.target.style.display = "none";
+        // Clic en cualquier parte del fondo deselecciona los iconos y cierra menú inicio
+        document.body.addEventListener('click', function (e) {
+            // Si el clic NO fue en un icono
+            if (!e.target.closest('.icon')) {
+                document.querySelectorAll('.icon').forEach(el => el.classList.remove('selected'));
+            }
+            // Si el clic NO fue en el botón de inicio ni en el menú, cerrar menú
+            if (!e.target.closest('.start-button') && !e.target.closest('.start-menu')) {
+                document.getElementById('start-menu').style.display = 'none';
             }
         });
 
-    </script>
+        // --- 2. GESTIÓN DE VENTANAS (ABRIR, CERRAR, MIN, MAX) ---
+        let zIndexCounter = 100;
 
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'flex';
+            // Restaurar si estaba minimizada (opcional, aquí solo la mostramos)
+            focusWindow(id);
+        }
+
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function minimizeWindow(id) {
+            // Efecto simple de desaparecer
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function toggleMaximize(id) {
+            const win = document.getElementById(id);
+            win.classList.toggle('maximized');
+        }
+
+        function focusWindow(id) {
+            zIndexCounter++;
+            document.getElementById(id).style.zIndex = zIndexCounter;
+        }
+
+        // --- 3. MENÚ INICIO ---
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu');
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+                menu.style.zIndex = zIndexCounter + 1; // Siempre encima
+            }
+        }
+
+        // --- 4. ARRASTRAR VENTANAS (DRAG & DROP MEJORADO) ---
+        let isDragging = false;
+        let currentWindow = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        function startDrag(e, id) {
+            // Si está maximizada, no permitir arrastrar (comportamiento normal de windows)
+            const win = document.getElementById(id);
+            if (win.classList.contains('maximized')) return;
+
+            e.preventDefault(); // Evita seleccionar texto
+            currentWindow = win;
+            focusWindow(id); // Traer al frente al empezar a arrastrar
+
+            // Calcular dónde hizo clic el mouse relativo a la ventana
+            dragOffsetX = e.clientX - currentWindow.offsetLeft;
+            dragOffsetY = e.clientY - currentWindow.offsetTop;
+
+            isDragging = true;
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging && currentWindow) {
+                // Mover la ventana
+                currentWindow.style.left = (e.clientX - dragOffsetX) + 'px';
+                currentWindow.style.top = (e.clientY - dragOffsetY) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            currentWindow = null;
+        });
+
+        // --- 5. RELOJ ---
+        function updateClock() {
+            const now = new Date();
+            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const date = now.toLocaleDateString();
+            document.getElementById('clock').innerHTML = `${time}<br><span style="font-size:10px">${date}</span>`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        const jobsData = {
+            'moebius': {
+                title: "Moebius - Turismo y Gestión de Servicios",
+                period: "Julio 2023 - Septiembre 2025 | Remoto 100%",
+                content: `
+            <p><strong>Rol: Desarrollador Frontend</strong></p>
+            <p>Lideré el desarrollo frontend del módulo de turismo y transporte, integrándolo a la plataforma existente de gestión hotelera. Trabajé en conjunto con el equipo de Backend y QA para garantizar una implementación estable.</p>
+            
+            <h4>Logros Destacados:</h4>
+            <ul>
+                <li><strong>Escalabilidad y Reutilización:</strong> Reduje el tiempo de desarrollo de nuevas vistas en un <strong>35%</strong> e incrementé la reutilización de componentes en un <strong>50%</strong>.</li>
+                <li><strong>Optimización de Archivos:</strong> Eliminé el <strong>100%</strong> de los casos de carga infinita y reduje los tiempos de subida en archivos grandes en un <strong>70%</strong>.</li>
+                <li><strong>Consistencia de Diseño:</strong> Aumenté la claridad visual en un <strong>40%</strong> y disminuí consultas de soporte en un <strong>25%</strong>.</li>
+                <li><strong>Integración PHP/MySQL:</strong> Mejoré tiempos de carga en un <strong>30%</strong> y reduje errores de comunicación en un <strong>60%</strong>.</li>
+                <li><strong>Documentación:</strong> Bajé la curva de aprendizaje del equipo en un <strong>45%</strong>.</li>
+            </ul>
+        `
+            },
+            'legalrun': {
+                title: "LegalRun - Gestión de Casos Legales",
+                period: "Contrato por horas | Remoto 100%",
+                content: `
+            <p><strong>Rol: Desarrollador Full Stack Freelance</strong></p>
+            <p>Plataforma para firmas legales en Latinoamérica. Mi rol se centró en el desarrollo de funcionalidades, mejora de módulos existentes y resolución de incidencias críticas en producción, con enfoque en velocidad y estabilidad.</p>
+            
+            <h4>Logros Destacados:</h4>
+            <ul>
+                <li><strong>Resolución Crítica:</strong> Resolví bugs en producción en menos de <strong>5 horas</strong> en promedio.</li>
+                <li><strong>Visualización Documental:</strong> Desarrollé una modal interactiva que centralizó archivos, reduciendo el tiempo de búsqueda de documentos en un <strong>40%</strong>.</li>
+                <li><strong>Capacitación:</strong> Reduje la curva de adaptación de nuevos desarrolladores en un <strong>50%</strong>.</li>
+            </ul>
+        `
+            },
+            'petzify': {
+                title: "Petzify App – Startup Propia",
+                period: "Marzo 2023 - Diciembre 2023 · 10 meses | Híbrido",
+                content: `
+            <p><strong>Rol: Co-Fundador y Desarrollador Frontend</strong></p>
+            <p>Aplicación tipo red social para mascotas. Participé en todas las etapas: planificación, desarrollo Full Stack (Node.js/Express.js/MongoDB), diseño UI/UX, testing y estrategia de lanzamiento.</p>
+
+            <h4>Logros Destacados:</h4>
+            <ul>
+                <li><strong>Full Stack:</strong> Arquitectura estable con <strong>99% de tiempo de actividad</strong>.</li>
+                <li><strong>Autenticación Segura:</strong> Integración de JWT, reduciendo intentos fallidos de login en un <strong>65%</strong>.</li>
+                <li><strong>Geolocalización:</strong> Implementé Google Maps API y WebSockets para un mapa en tiempo real de mascotas perdidas, reduciendo el tiempo de reporte en un <strong>70%</strong>.</li>
+                <li><strong>Multiplataforma:</strong> Construí la app en **React.js y React Native (Expo)**, funcionando en **Android, iOS y Web** sin duplicación de código.</li>
+                <li><strong>AWS:</strong> Configuré Amazon S3 y ECS, mejorando la carga de archivos en un <strong>55%</strong>.</li>
+                <li><strong>Comunidad:</strong> Logramos más de <strong>800 usuarios</strong> en etapa beta y aumentamos la retención semanal en un <strong>30%</strong>.</li>
+            </ul>
+        `
+            }
+        };
+
+        function openJob(jobId) {
+            const data = jobsData[jobId];
+            if (!data) return;
+
+            // 1. Ocultar carpetas
+            document.getElementById('view-folders').style.display = 'none';
+
+            // 2. Mostrar detalles y botón atrás
+            document.getElementById('view-details').style.display = 'block';
+            document.getElementById('exp-nav').style.display = 'flex';
+
+            // 3. Llenar la información
+            document.getElementById('job-title').innerText = data.title;
+            // Se añade el periodo de trabajo debajo del título
+            document.getElementById('job-desc').innerHTML = `<p style="font-style: italic; color: #555;">${data.period}</p>` + data.content;
+            document.getElementById('exp-path-text').innerText = "Mis Trabajos > " + data.title;
+        }
+
+        function showFolderView() {
+            // 1. Mostrar carpetas
+            document.getElementById('view-folders').style.display = 'flex';
+
+            // 2. Ocultar detalles y botón atrás
+            document.getElementById('view-details').style.display = 'none';
+            document.getElementById('exp-nav').style.display = 'none';
+        }
+
+        function openCV(fileName) {
+            // Abre el archivo en la misma pestaña.
+            // Esto reemplazará tu portafolio por el visor de PDF del navegador.
+            window.open(fileName, '_self');
+        }
+    </script>
 </body>
 
 </html>
