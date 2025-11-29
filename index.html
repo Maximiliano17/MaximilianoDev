@@ -23,12 +23,15 @@
         /* --- ICONOS DEL ESCRITORIO --- */
         .desktop-icons {
             display: flex;
-            flex-direction: column; /* <-- Hace que los elementos fluyan verticalmente */
+            flex-direction: column;
+            /* <-- Hace que los elementos fluyan verticalmente */
             gap: 10px;
             padding: 10px;
             width: fit-content;
-            height: 90vh; /* <-- Define la altura máxima de la columna */
-            flex-wrap: wrap; /* <-- Permite que los elementos pasen a una nueva columna cuando se supera la altura */
+            height: 90vh;
+            /* <-- Define la altura máxima de la columna */
+            flex-wrap: wrap;
+            /* <-- Permite que los elementos pasen a una nueva columna cuando se supera la altura */
             /* El background: red; lo puedes eliminar, solo era para debug */
         }
 
@@ -390,43 +393,87 @@
         }
 
         /* --- ESTILOS PARA LAS TARJETAS DE RECOMENDACIÓN --- */
-.recommendation-card {
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
+        .recommendation-card {
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
 
-.recommendation-card h4 {
-    margin-top: 0;
-    margin-bottom: 5px;
-    color: #004d99; /* Azul de Windows */
-    font-size: 16px;
-    font-weight: 600;
-}
+        .recommendation-card h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #004d99;
+            /* Azul de Windows */
+            font-size: 16px;
+            font-weight: 600;
+        }
 
-.recommendation-card p {
-    font-size: 14px;
-    margin: 10px 0;
-    color: #333;
-}
+        .recommendation-card p {
+            font-size: 14px;
+            margin: 10px 0;
+            color: #333;
+        }
 
-.recommendation-card .source-info {
-    display: block;
-    text-align: right;
-    font-size: 11px;
-    color: #666;
-}
+        .recommendation-card .source-info {
+            display: block;
+            text-align: right;
+            font-size: 11px;
+            color: #666;
+        }
 
-/* Asegura que el contenido se pueda desplazar si hay muchas recomendaciones */
-.main-content {
-    /* Mantenemos el flex: 1 y solo aseguramos el overflow */
-    overflow-y: auto; 
-}
+        /* Asegura que el contenido se pueda desplazar si hay muchas recomendaciones */
+        .main-content {
+            /* Mantenemos el flex: 1 y solo aseguramos el overflow */
+            overflow-y: auto;
+        }
 
+        /* --- AJUSTES RESPONSIVE PARA MÓVILES Y TABLETAS --- */
+        @media (max-width: 768px) {
 
+            /* 1. Ajuste General de las Ventanas */
+            .window {
+                /* Ignoramos el 'top' y 'left' definido en línea y centramos */
+                top: 20px !important;
+                left: 5% !important;
+
+                /* Ocupar casi todo el ancho y alto de la pantalla */
+                width: 90% !important;
+                height: calc(100% - 70px) !important;
+                /* Deja espacio para la barra de tareas */
+
+                /* Aseguramos que se pueda deslizar el contenido de la ventana si es necesario */
+                overflow: hidden;
+
+                /* Opcional: Quitamos la transición para que se abran más rápido en móviles */
+                transition: none;
+            }
+
+            /* 2. Ajuste de la Barra Lateral dentro de la Ventana */
+            .sidebar {
+                /* Hacemos la barra lateral más estrecha para dejar más espacio al contenido */
+                width: 80px;
+            }
+
+            /* 3. Optimización del Escritorio (Opcional) */
+            .desktop-icons {
+                /* En móviles, es mejor que los iconos fluyan en filas (horizontalmente) */
+                flex-direction: row;
+                flex-wrap: wrap;
+                height: auto;
+                /* Ya no necesitamos una altura fija */
+                padding-bottom: 50px;
+                /* Evitar que la barra de tareas tape los iconos inferiores */
+            }
+
+            /* 4. Reducir texto de los iconos */
+            .icon div {
+                font-size: 10px;
+            }
+
+        }
     </style>
 </head>
 
@@ -449,7 +496,7 @@
         <div class="icon" id="icon-profile" onclick="selectIcon('icon-profile', event)"
             ondblclick="openWindow('win-profile')">
             <img src="folder2.png" alt="Carpeta">
-            <div style=" padding-left: 15px;">Recomendaciones</div>
+            <div>Valoraciones</div>
         </div>
 
         <div class="icon" id="icon-exp" onclick="selectIcon('icon-exp', event)" ondblclick="openWindow('win-exp')">
@@ -468,12 +515,15 @@
             <div>CV Maximiliano FullStack.pdf</div>
         </div>
 
-        <a href="https://www.linkedin.com/in/maximilianodossantos/" target="_blank" style="text-decoration: none; color: white;" class="icon" id="icon-trash" onclick="selectIcon('icon-trash', event)">
+        <a href="https://www.linkedin.com/in/maximilianodossantos/" target="_blank"
+            style="text-decoration: none; color: white;" class="icon" id="icon-trash"
+            onclick="selectIcon('icon-trash', event)">
             <img src="logotipo-de-linkedin.png" alt="Papelera">
             <div>Linkedin</div>
         </a>
 
-        <a href="https://github.com/Maximiliano17" target="_blank" style="text-decoration: none; color: white;" class="icon" id="icon-trash" onclick="selectIcon('icon-trash', event)">
+        <a href="https://github.com/Maximiliano17" target="_blank" style="text-decoration: none; color: white;"
+            class="icon" id="icon-trash" onclick="selectIcon('icon-trash', event)">
             <img src="github.png" alt="Papelera">
             <div>Github</div>
         </a>
@@ -482,7 +532,7 @@
             <img src="papelera-de-reciclaje.png" alt="Papelera">
             <div>Papelera</div>
         </div>
-        
+
     </div>
 
     <div id="win-cv" class="window" style="top: 10%; left: 15%; width: 800px; height: 550px;"
@@ -509,56 +559,67 @@
     </div>
 
     <div id="win-profile" class="window" onmousedown="focusWindow('win-profile')" style="width: 700px; height: 500px;">
-    <div class="title-bar" onmousedown="startDrag(event, 'win-profile')">
-        <div class="title-text">
-            <img src="folder2.png" width="16">
-            Recomendaciones
+        <div class="title-bar" onmousedown="startDrag(event, 'win-profile')">
+            <div class="title-text">
+                <img src="folder2.png" width="16">
+                Valoraciones
+            </div>
+            <div class="window-controls">
+                <div class="control-btn" onclick="minimizeWindow('win-profile')">_</div>
+                <div class="control-btn" onclick="toggleMaximize('win-profile')">□</div>
+                <div class="control-btn close-btn" onclick="closeWindow('win-profile')">X</div>
+            </div>
         </div>
-        <div class="window-controls">
-            <div class="control-btn" onclick="minimizeWindow('win-profile')">_</div>
-            <div class="control-btn" onclick="toggleMaximize('win-profile')">□</div>
-            <div class="control-btn close-btn" onclick="closeWindow('win-profile')">X</div>
+        <div class="window-body">
+            <div class="sidebar">
+                <ul>
+                    <li style="font-weight:bold">Todas las Recomendaciones</li>
+                    <li>Por Rol</li>
+                    <li>Por Proyecto</li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <h3>Archivos de Recomendación <small style="color: gray;">(4 elementos)</small></h3>
+                <hr>
+
+                <div class="recommendation-card">
+                    <h4>Denisse Molina <small>(Soporte en integraciones y QA tester)</small> [cite: 51]</h4>
+                    <p style="font-style: italic;">"Trabajar con Maximiliano fue una experiencia muy grata. Es una
+                        persona con gran calidad humana, siempre dispuesta a ayudar y a mantener un ambiente positivo en
+                        el equipo." [cite: 51, 52]</p>
+                    <a href="https://www.linkedin.com/in/maximilianodossantos/" target="_blank" class="source-info">Fuente</a>
+                </div>
+
+                <div class="recommendation-card">
+                    <h4>Darío Condori <small>(Desarrollador Backend)</small> [cite: 53]</h4>
+                    <p style="font-style: italic;">"Trabajamos juntos en Moebius donde él se encargó del Frontend
+                        (Angular) y yo del Backend (Laravel). Valoro su enfoque colaborativo, siempre dispuesto a
+                        encontrar la solución para integrar nuestros trabajos. Es un colega confiable y un profesional
+                        con sólidos conocimientos en Angular." [cite: 53, 54, 55]</p>
+                    <a href="https://www.linkedin.com/in/maximilianodossantos/" target="_blank" class="source-info">Fuente</a>
+                </div>
+
+                <div class="recommendation-card">
+                    <h4>Ramón Diaz <small>(Soporte IT – Tester Manual QA)</small> [cite: 56]</h4>
+                    <p style="font-style: italic;">"Me complace recomendar a Maximiliano por su destacado desempeño en
+                        la resolución de bugs en el proyecto para el cual colaboré... Maximiliano demostró una habilidad
+                        excepcional para comprender y solucionar problemas técnicos de manera rápida y efectiva. Su
+                        dedicación y disposición para ayudar fueron notables." [cite: 56, 57, 58, 59]</p>
+                    <a href="https://www.linkedin.com/in/maximilianodossantos/" target="_blank" class="source-info">Fuente</a>
+                </div>
+
+                <div class="recommendation-card">
+                    <h4>Juan Pablo Villalba <small>(React Native Dev)</small></h4>
+                    <p style="font-style: italic;">"Maximiliano Dos Santos es un compañero de equipo eficaz, que maneja
+                        un gran nivel en programación de varios tipos. Tiene una facilidad de aprendizaje y adaptación
+                        que le permiten reestructurar proyectos según la necesidad. Es fácil trabajar a su lado; destaco
+                        su compromiso al nunca fallar en una entrega, por más complicada que esta sea."</p>
+                    <a href="https://www.linkedin.com/in/maximilianodossantos/" target="_blank" class="source-info">Fuente</a>
+                </div>
+
+            </div>
         </div>
     </div>
-    <div class="window-body">
-        <div class="sidebar">
-            <ul>
-                <li style="font-weight:bold">Todas las Recomendaciones</li>
-                <li>Por Rol</li>
-                <li>Por Proyecto</li>
-            </ul>
-        </div>
-        <div class="main-content">
-            <h3>Archivos de Recomendación <small style="color: gray;">(4 elementos)</small></h3>
-            <hr>
-            
-            <div class="recommendation-card">
-                <h4>Denisse Molina <small>(Soporte en integraciones y QA tester)</small> [cite: 51]</h4>
-                <p style="font-style: italic;">"Trabajar con Maximiliano fue una experiencia muy grata. Es una persona con gran calidad humana, siempre dispuesta a ayudar y a mantener un ambiente positivo en el equipo." [cite: 51, 52]</p>
-                <span class="source-info">Fuente: Moebius</span>
-            </div>
-
-            <div class="recommendation-card">
-                <h4>Darío Condori <small>(Desarrollador Backend)</small> [cite: 53]</h4>
-                <p style="font-style: italic;">"Trabajamos juntos en Moebius donde él se encargó del Frontend (Angular) y yo del Backend (Laravel). Valoro su enfoque colaborativo, siempre dispuesto a encontrar la solución para integrar nuestros trabajos. Es un colega confiable y un profesional con sólidos conocimientos en Angular." [cite: 53, 54, 55]</p>
-                <span class="source-info">Fuente: Moebius</span>
-            </div>
-            
-            <div class="recommendation-card">
-                <h4>Ramón Diaz <small>(Soporte IT – Tester Manual QA)</small> [cite: 56]</h4>
-                <p style="font-style: italic;">"Me complace recomendar a Maximiliano por su destacado desempeño en la resolución de bugs en el proyecto para el cual colaboré... Maximiliano demostró una habilidad excepcional para comprender y solucionar problemas técnicos de manera rápida y efectiva. Su dedicación y disposición para ayudar fueron notables." [cite: 56, 57, 58, 59]</p>
-                <span class="source-info">Fuente: Colaboración en Proyecto</span>
-            </div>
-
-            <div class="recommendation-card">
-                <h4>Juan Pablo Villalba <small>(React Native Dev)</small></h4>
-                <p style="font-style: italic;">"Maximiliano Dos Santos es un compañero de equipo eficaz, que maneja un gran nivel en programación de varios tipos. Tiene una facilidad de aprendizaje y adaptación que le permiten reestructurar proyectos según la necesidad. Es fácil trabajar a su lado; destaco su compromiso al nunca fallar en una entrega, por más complicada que esta sea."</p>
-                <span class="source-info">Fuente: Petzify</span>
-            </div>
-
-        </div>
-    </div>
-</div>
 
     <div id="win-exp" class="window" style="top: 20%; left: 25%;" onmousedown="focusWindow('win-exp')">
         <div class="title-bar" onmousedown="startDrag(event, 'win-exp')">
@@ -639,7 +700,7 @@
             <textarea class="notepad-area">
 Estimado equipo de contratación,
 
-Soy Maximiliano Dos Santos, un apasionado desarrollador Front-End con + dos años de experiencia, aunque se siente como toda una vida cuando has trabajado principalmente con Angular... (sí, lo sé, pero no me juzguen, ¡todos tenemos una historia difícil!).
+Soy Maximiliano Dos Santos, un apasionado desarrollador Front-End con mas de dos años de experiencia, aunque se siente como toda una vida cuando has trabajado principalmente con Angular... (sí, lo sé, pero no me juzguen, ¡todos tenemos una historia difícil!).
 
 Durante este tiempo, he tenido el privilegio de liderar equipos, ayudando a mis compañeros a crecer, aprender y, sobre todo, a sobrevivir a los bugs más inesperados.
 
